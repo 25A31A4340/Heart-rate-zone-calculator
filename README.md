@@ -82,3 +82,6 @@ Heart-rate-zone-calculator/
 ---
 
 ## Author
+
+Developed by Deepak and Team
+
