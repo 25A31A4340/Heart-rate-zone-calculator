@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Heart Rate Zone Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- 🔴 LIVE ECG BACKGROUND -->
+<div class="ecg-bg">
+    <canvas id="ecgCanvas"></canvas>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <h1>Heart Rate Zone Calculator</h1>
+    <p class="subtitle">Enter your details to calculate zones</p>
+
+    <div class="input-box">
+
+        <label>Age</label>
+        <input type="number" id="age" placeholder="Enter Age">
+
+        <p class="question">Do you know your Resting Heart Rate?</p>
+
+        <div class="btn-group">
+            <button onclick="chooseYes()">Yes</button>
+            <button onclick="chooseNo()">No</button>
+        </div>
+
+        <input type="number" id="hrrest" placeholder="Enter HRrest" class="hidden">
+
+        <button class="main-btn" onclick="goToResult()">Calculate</button>
+
+    </div>
+
+</div>
+
+<!-- 🎧 ECG SOUND -->
+<audio id="ecgSound" src="../assets/ECG.mp3" loop></audio>
+
+<!-- JS -->
+<script src="script.js"></script>
+
+</body>
+</html>

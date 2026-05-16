@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>❤️ AI Heart Monitor</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="card">
+
+<div class="shine"></div>
+
+<div class="header">❤️ AI Heart Monitor</div>
+
+<div class="heart-container">
+<div class="ripple" id="ripple"></div>
+<div class="heart">❤️</div>
+</div>
+
+<div class="info" id="info"></div>
+
+<div class="zone" id="zoneText"></div>
+
+<div class="suggestion" id="aiTip"></div>
+
+<input type="range" min="50" max="100" value="50" id="intensity" class="slider">
+
+<div class="audio-wave">
+<div class="bar b1"></div><div class="bar b2"></div><div class="bar b3"></div>
+<div class="bar b4"></div><div class="bar b5"></div><div class="bar b6"></div>
+<div class="bar b7"></div><div class="bar b8"></div><div class="bar b9"></div><div class="bar b10"></div>
+</div>
+
+<div class="graph-wrap">
+<canvas id="chart"></canvas>
+</div>
+
+</div>
+
+<script>
+
+// ===== GET INPUT PAGE DATA =====
+let age = parseInt(localStorage.getItem("age")) || 20;
+let hrrest = parseInt(localStorage.getItem("hrrest")) || 72;
+
+// Max heart rate
+let maxHR = 220 - age;
+
+// show info
+document.getElementById("info").innerHTML =
+`Age: <span class="value">${age}</span> |
+Resting HR: <span class="value">${hrrest}</span> |
+Max HR: <span class="value">${maxHR}</span>`;
+
+// ===== ZONES =====
+function getZone(p){
+
+if(p < 60) return ["Fat Burn","#00ffcc","🔥 Fat burning mode"];
+if(p < 70) return ["Fitness","#00ccff","⚡ Improve stamina"];
+if(p < 80) return ["Cardio","#ffaa00","💪 Build endurance"];
+if(p < 90) return ["Peak","#ff6600","🚀 High intensity"];
+return ["Danger","#ff0000","⚠️ Reduce intensity"];
+}
+
+// ===== CHART =====
+const ctx = document.getElementById("chart").getContext("2d");
+
+let bpmLine = Array(20).fill(120);
+
+const chart = new Chart(ctx,{
+type:"line",
+data:{
+labels:Array(20).fill(""),
+datasets:[{
+data:bpmLine,
+borderColor:"#00ffe5",
+borderWidth:3,
+tension:0.35
+}]
+},
+options:{
+responsive:true,
+animation:false,
+plugins:{legend:{display:false}}
+}
+});
+
+function updateGraph(bpm){
+bpmLine.push(bpm);
+bpmLine.shift();
+chart.update();
+}
+
+// ===== HEART MONITOR =====
+const intensity = document.getElementById("intensity");
+const zoneText = document.getElementById("zoneText");
+const aiTip = document.getElementById("aiTip");
+const ripple = document.getElementById("ripple");
+
+function updateMonitor(){
+
+let p = parseInt(intensity.value);
+
+// BPM calculation
+let bpm = Math.round(maxHR * p / 100);
+
+let [zone,color,tip] = getZone(p);
+
+zoneText.innerHTML = `${zone} (${bpm} BPM)`;
+zoneText.style.color = color;
+
+aiTip.innerHTML = tip;
+
+// ripple speed
+let dur = 60 / bpm;
+ripple.style.animation = `ripple ${dur}s infinite`;
+
+updateGraph(bpm);
+}
+
+intensity.addEventListener("input", updateMonitor);
+
+setInterval(updateMonitor, 700);
+
+updateMonitor();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heart Rate Zone Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,200;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══ BACKGROUND LAYERS ══ -->
+  <div class="bg-layer"></div>
+
+  <!-- Vein / vessel network -->
+  <div class="veins">
+    <svg width="100%" height="100%" viewBox="0 0 1440 900"
+         preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="vg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(70,100,200,0.38)"/>
+          <stop offset="100%" stop-color="rgba(30,50,120,0)"/>
+        </radialGradient>
+      </defs>
+      <path d="M720 120 C730 200 760 280 740 380 C720 480 680 530 660 620"        stroke="rgba(70,100,190,0.48)" stroke-width="4"   fill="none"/>
+      <path d="M740 200 C800 180 870 190 920 220 C960 245 980 280 970 320"         stroke="rgba(60,90,175,0.38)"  stroke-width="2.5" fill="none"/>
+      <path d="M730 195 C660 170 590 185 550 215 C515 240 505 278 515 318"         stroke="rgba(60,90,175,0.38)"  stroke-width="2.5" fill="none"/>
+      <path d="M700 280 C680 310 660 340 650 380 C640 415 648 445 660 470"         stroke="rgba(50,75,160,0.32)"  stroke-width="1.8" fill="none"/>
+      <path d="M760 285 C780 318 795 348 798 385 C800 420 790 450 775 475"         stroke="rgba(50,75,160,0.32)"  stroke-width="1.8" fill="none"/>
+      <path d="M920 220 C950 200 990 200 1020 218 C1055 238 1070 268 1060 300"     stroke="rgba(45,65,150,0.28)"  stroke-width="1.5" fill="none"/>
+      <path d="M550 215 C515 195 478 197 450 216 C422 234 412 264 420 295"         stroke="rgba(45,65,150,0.28)"  stroke-width="1.5" fill="none"/>
+      <path d="M970 320 C985 360 980 400 960 430 C940 455 910 460 885 448"         stroke="rgba(40,60,140,0.24)"  stroke-width="1.2" fill="none"/>
+      <path d="M515 318 C502 358 508 398 528 428 C548 455 578 460 602 448"         stroke="rgba(40,60,140,0.24)"  stroke-width="1.2" fill="none"/>
+      <path d="M660 470 C640 500 630 530 635 560 C640 585 658 600 672 590"         stroke="rgba(35,55,130,0.20)"  stroke-width="1"   fill="none"/>
+      <path d="M775 475 C795 505 804 535 800 563 C795 588 778 604 763 594"         stroke="rgba(35,55,130,0.20)"  stroke-width="1"   fill="none"/>
+      <path d="M885 448 C900 475 898 505 882 525 C868 542 848 544 834 534"         stroke="rgba(30,50,120,0.18)"  stroke-width="0.9" fill="none"/>
+      <path d="M602 448 C586 476 588 506 604 526 C618 543 638 545 652 535"         stroke="rgba(30,50,120,0.18)"  stroke-width="0.9" fill="none"/>
+      <ellipse cx="720" cy="420" rx="320" ry="280" fill="url(#vg)"/>
+    </svg>
+  </div>
+
+  <!-- ══ REALISTIC HEART SVG ══ -->
+  <div class="heart-bg-wrap">
+    <svg class="heart-realistic" viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hg-main" cx="45%" cy="38%" r="58%">
+          <stop offset="0%"   stop-color="#2a4a9e"/>
+          <stop offset="30%"  stop-color="#1e3680"/>
+          <stop offset="65%"  stop-color="#152660"/>
+          <stop offset="100%" stop-color="#0a1435"/>
+        </radialGradient>
+        <radialGradient id="hg-hi" cx="38%" cy="30%" r="35%">
+          <stop offset="0%"   stop-color="rgba(100,145,255,0.70)"/>
+          <stop offset="100%" stop-color="rgba(40,70,180,0)"/>
+        </radialGradient>
+        <radialGradient id="hg-hi2" cx="72%" cy="28%" r="28%">
+          <stop offset="0%"   stop-color="rgba(80,120,230,0.55)"/>
+          <stop offset="100%" stop-color="rgba(30,55,160,0)"/>
+        </radialGradient>
+        <radialGradient id="hg-apex" cx="50%" cy="90%" r="35%">
+          <stop offset="0%"   stop-color="rgba(5,8,25,0.72)"/>
+          <stop offset="100%" stop-color="rgba(5,8,25,0)"/>
+        </radialGradient>
+        <pattern id="fibre" x="0" y="0" width="8" height="8"
+                 patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
+          <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(0,0,0,0.14)" stroke-width="0.8"/>
+        </pattern>
+        <linearGradient id="art" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="rgba(100,150,255,0.88)"/>
+          <stop offset="100%" stop-color="rgba(50,85,200,0.60)"/>
+        </linearGradient>
+        <filter id="softshadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+      </defs>
+
+      <!-- Drop shadow -->
+      <ellipse cx="252" cy="430" rx="190" ry="22"
+               fill="rgba(0,0,0,0.45)" filter="url(#softshadow)"/>
+
+      <!-- Main heart body -->
+      <path d="M250 410 C220 390 170 360 140 320 C110 280 100 240 105 200
+               C110 158 130 130 160 118 C185 108 210 112 228 128
+               C240 140 248 158 250 175 C252 158 260 140 272 128
+               C290 112 315 108 340 118 C370 130 390 158 395 200
+               C400 240 390 280 360 320 C330 360 280 390 250 410Z"
+            fill="url(#hg-main)"/>
+
+      <!-- Muscle fibre texture -->
+      <path d="M250 410 C220 390 170 360 140 320 C110 280 100 240 105 200
+               C110 158 130 130 160 118 C185 108 210 112 228 128
+               C240 140 248 158 250 175 C252 158 260 140 272 128
+               C290 112 315 108 340 118 C370 130 390 158 395 200
+               C400 240 390 280 360 320 C330 360 280 390 250 410Z"
+            fill="url(#fibre)" opacity="0.5"/>
+
+      <!-- Left highlight -->
+      <path d="M250 410 C220 390 170 360 140 320 C110 280 100 240 105 200
+               C110 158 130 130 160 118 C185 108 210 112 228 128
+               C240 140 248 158 250 175Z"
+            fill="url(#hg-hi)"/>
+
+      <!-- Right highlight -->
+      <path d="M250 175 C252 158 260 140 272 128 C290 112 315 108 340 118
+               C370 130 390 158 395 200 C400 240 390 280 360 320
+               C330 360 280 390 250 410Z"
+            fill="url(#hg-hi2)"/>
+
+      <!-- Apex shadow -->
+      <path d="M250 410 C220 390 170 360 140 320 C110 280 100 240 105 200
+               C110 158 130 130 160 118 C185 108 210 112 228 128
+               C240 140 248 158 250 175 C252 158 260 140 272 128
+               C290 112 315 108 340 118 C370 130 390 158 395 200
+               C400 240 390 280 360 320 C330 360 280 390 250 410Z"
+            fill="url(#hg-apex)"/>
+
+      <!-- Atrioventricular groove -->
+      <path d="M140 230 C180 220 215 215 250 218 C285 215 320 220 360 230"
+            stroke="rgba(8,15,50,0.55)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+      <!-- Right atrium -->
+      <ellipse cx="348" cy="175" rx="42" ry="50" fill="#1a2e7a" opacity="0.78"/>
+      <ellipse cx="336" cy="162" rx="28" ry="32" fill="rgba(70,110,220,0.35)"/>
+
+      <!-- Left atrium -->
+      <ellipse cx="155" cy="175" rx="40" ry="48" fill="#162870" opacity="0.78"/>
+      <ellipse cx="166" cy="162" rx="26" ry="30" fill="rgba(60,95,200,0.35)"/>
+
+      <!-- Interventricular sulcus -->
+      <path d="M250 175 C248 230 246 300 250 370 C252 330 254 240 250 175"
+            stroke="rgba(8,12,45,0.60)" stroke-width="4" fill="none"/>
+
+      <!-- Coronary arteries -->
+      <path d="M245 195 C238 240 232 300 235 360 C237 390 244 405 250 410"
+            stroke="url(#art)" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M200 195 C185 215 165 235 148 260 C133 283 128 310 138 332"
+            stroke="rgba(80,120,220,0.70)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M300 195 C316 215 338 238 352 262 C364 284 362 312 350 334"
+            stroke="rgba(80,120,220,0.65)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M235 280 C218 278 200 282 188 295" stroke="rgba(65,100,200,0.50)" stroke-width="1.8" fill="none"/>
+      <path d="M237 320 C218 322 200 330 192 344" stroke="rgba(65,100,200,0.45)" stroke-width="1.5" fill="none"/>
+      <path d="M263 280 C280 278 298 284 310 296" stroke="rgba(65,100,200,0.50)" stroke-width="1.8" fill="none"/>
+      <path d="M262 318 C280 322 297 330 306 344" stroke="rgba(65,100,200,0.45)" stroke-width="1.5" fill="none"/>
+
+      <!-- Aortic arch -->
+      <path d="M255 118 C257 100 262 82 270 70 C285 48 305 42 325 50 C342 57 352 74 348 92"
+            stroke="#1a2e7a" stroke-width="16" fill="none" stroke-linecap="round"/>
+      <path d="M255 118 C257 100 262 82 270 70 C285 48 305 42 325 50 C342 57 352 74 348 92"
+            stroke="rgba(50,85,190,0.72)" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M257 118 C259 104 263 90 270 80 C282 60 300 54 318 60 C334 66 342 80 340 94"
+            stroke="rgba(100,150,255,0.28)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+      <!-- Pulmonary trunk -->
+      <path d="M242 118 C238 100 228 82 215 70 C198 54 178 52 162 62 C148 70 144 86 150 102"
+            stroke="#152668" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M244 118 C240 104 232 88 220 76 C205 62 186 60 172 68 C158 75 155 88 160 100"
+            stroke="rgba(70,110,220,0.26)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+      <!-- Superior vena cava -->
+      <path d="M370 140 C378 120 378 98 372 80"
+            stroke="#101e58" stroke-width="12" fill="none" stroke-linecap="round"/>
+
+      <!-- Pericardium outline -->
+      <path d="M250 415 C218 394 168 362 136 320 C106 280 96 236 102 196
+               C108 154 130 124 162 112 C190 102 214 108 232 125
+               C240 133 247 148 250 168 C253 148 260 133 268 125
+               C286 108 310 102 338 112 C370 124 392 154 398 196
+               C404 236 394 280 364 320 C332 362 282 394 250 415Z"
+            fill="none" stroke="rgba(60,90,190,0.38)" stroke-width="1"/>
+
+      <!-- Specular gloss highlights -->
+      <ellipse cx="195" cy="165" rx="32" ry="22"
+               fill="rgba(120,160,255,0.09)" transform="rotate(-18,195,165)"/>
+      <ellipse cx="190" cy="160" rx="14" ry="9"
+               fill="rgba(150,190,255,0.14)" transform="rotate(-18,190,160)"/>
+      <ellipse cx="182" cy="154" rx="5"  ry="3.5"
+               fill="rgba(200,220,255,0.24)" transform="rotate(-18,182,154)"/>
+    </svg>
+  </div>
+
+  <div class="texture-overlay"></div>
+  <div class="readability-overlay"></div>
+
+  <!-- Pulse rings -->
+  <div class="pulse-rings">
+    <div class="p-ring"></div>
+    <div class="p-ring"></div>
+    <div class="p-ring"></div>
+  </div>
+
+  <!-- Blood cell particles -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- ══ HUD CHROME ══ -->
+  <div class="corners">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="hud-top">
+    <span class="hl">HRZ // v2.0</span>
+    <span>CARDIAC MONITOR &nbsp;|&nbsp; STATUS:
+      <span class="status-active">ACTIVE</span>
+      <span class="blink">▮</span>
+    </span>
+    <span class="hl">&gt;_ CONSOLE APP</span>
+  </div>
+
+  <div class="hud-bot">
+    <span>DATA &bull; SCIENCE &bull; PERFORMANCE</span>
+    <span id="clock">--:--:--</span>
+    <span>CARDIAC ANALYSIS MODULE</span>
+  </div>
+
+  <!-- ══ ECG STRIP ══ -->
+  <div class="ecg-strip">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+      <polyline class="ecg-glow"
+        points="0,30 60,30 100,30 118,6 130,54 142,30 200,30
+                280,30 318,30 330,6 342,54 354,30 420,30
+                500,30 538,30 550,6 562,54 574,30 640,30
+                720,30 758,30 770,6 782,54 794,30 860,30
+                940,30 978,30 990,6 1002,54 1014,30 1080,30
+                1160,30 1198,30 1210,6 1222,54 1234,30 1300,30
+                1380,30 1418,30 1430,6 1440,30"/>
+      <polyline class="ecg-line"
+        points="0,30 60,30 100,30 118,6 130,54 142,30 200,30
+                280,30 318,30 330,6 342,54 354,30 420,30
+                500,30 538,30 550,6 562,54 574,30 640,30
+                720,30 758,30 770,6 782,54 794,30 860,30
+                940,30 978,30 990,6 1002,54 1014,30 1080,30
+                1160,30 1198,30 1210,6 1222,54 1234,30 1300,30
+                1380,30 1418,30 1430,6 1440,30"/>
+    </svg>
+  </div>
+
+  <!-- ══ LEFT PANEL — Zones ══ -->
+  <div class="zones-panel">
+    <div class="zp-title">Zones Overview</div>
+    <div class="zp-row">
+      <div class="zp-dot" style="background:#00B4D8;box-shadow:0 0 5px #00B4D8"></div>
+      <div class="zp-label">Z1 &nbsp;50–60% &nbsp;Very Light</div>
+    </div>
+    <div class="zp-row">
+      <div class="zp-dot" style="background:#00E676;box-shadow:0 0 5px #00E676"></div>
+      <div class="zp-label">Z2 &nbsp;60–70% &nbsp;Light</div>
+    </div>
+    <div class="zp-row">
+      <div class="zp-dot" style="background:#FFD600;box-shadow:0 0 5px #FFD600"></div>
+      <div class="zp-label">Z3 &nbsp;70–80% &nbsp;Moderate</div>
+    </div>
+    <div class="zp-row">
+      <div class="zp-dot" style="background:#FF6D00;box-shadow:0 0 5px #FF6D00"></div>
+      <div class="zp-label">Z4 &nbsp;80–90% &nbsp;Hard</div>
+    </div>
+    <div class="zp-row">
+      <div class="zp-dot" style="background:#FF1744;box-shadow:0 0 5px #FF1744"></div>
+      <div class="zp-label">Z5 &nbsp;90–100% Max</div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT PANEL — Stats ══ -->
+  <div class="stat-panel">
+    <div class="sp-item">
+      <div class="sp-lbl">Max Heart Rate</div>
+      <div class="sp-val">220 − Age</div>
+    </div>
+    <div class="sp-item">
+      <div class="sp-lbl">Formula</div>
+      <div class="sp-val sp-small">Karvonen</div>
+    </div>
+    <div class="sp-item">
+      <div class="sp-lbl">Live BPM</div>
+      <div class="sp-val" id="live-bpm">72</div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <div class="content">
+
+    <div class="title-wrap">
+      <div class="pre-label">Cardiac Performance System</div>
+      <div class="main-title">
+        HEART RATE
+        <span>ZONE CALCULATOR</span>
+      </div>
+      <div class="tagline">Calculate &middot; Train &middot; Optimize</div>
+    </div>
+
+    <div class="btn-area">
+      <!-- Sound button is hidden via CSS (display:none in style.css) -->
+      <button class="btn-sound" id="soundBtn" onclick="toggleSound()">
+        <div class="sound-icon" id="soundIcon">🔊</div>
+        <span class="sound-label" id="soundLabel">Heartbeat On</span>
+      </button>
+
+      <button class="btn-start" onclick="goToInput()">
+        START &nbsp;›
+      </button>
+      <div class="start-hint">PRESS <b>ENTER</b> TO BEGIN</div>
+    </div>
+
+    <div class="desc-wrap">
+      <p class="desc">
+        Discover your personalised heart rate training zones.
+        Train smarter with science-backed cardiac thresholds
+        tailored to your physiology.
+      </p>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
