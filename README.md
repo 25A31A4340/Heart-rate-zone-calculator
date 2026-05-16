@@ -63,13 +63,13 @@ Heart-rate-zone-calculator/
 ## Screenshots
 
 ### Home Page
-![Home Page](screenshots/homepage.png)
+![Home Page](homepage.png)
 
 ### Input Page
-![Input Page](screenshots/inputpage.png)
+![Input Page](inputpage.png)
 
 ### Result Page
-![Result Page](screenshots/resultpage.png)
+![Result Page](resultpage.png)
 
 ---
 
