@@ -82,4 +82,3 @@ Heart-rate-zone-calculator/
 ---
 
 ## Author
-Gunasri Gowroju and Team
